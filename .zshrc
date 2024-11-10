@@ -68,7 +68,7 @@ if exist "/opt/anaconda3"; then
 fi
 
 # Gem (Ruby)
-if exits "$HOME/gems"; then
+if exist "$HOME/gems"; then
 	export GEM_HOME="$HOME/gems"
 	export PATH="$HOME/gems/bin:$PATH"
 fi
@@ -83,11 +83,6 @@ if command_exist "nvim"; then
 	alias v='nvim'  # Opens Neovim
 	alias vimrc='nvim ~/.vimrc'  # Edit the Vim configuration file using Neovim
 	alias zshrc='nvim ~/.zshrc'  # Edit the Zsh configuration file using Neovim
-fi
-
-# fzf
-if command_exist "fzf"; then
-	source < (fzf --zsh)
 fi
 
 # aliases
