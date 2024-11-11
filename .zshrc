@@ -1,3 +1,31 @@
+# Get the operating system name using uname
+get_os() {
+	local os_name="$(uname)"
+	if [[ "$os_name" == "Darwin" ]]; then
+		echo "macOS"
+	elif [[ "$os_name" == "Linux" ]]; then
+		echo "Linux"
+	else
+		echo "Unknown"
+	fi
+}
+
+is_macos() {
+	if [[ "$(get_os)" == "macOS" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+is_linux() {
+	if [[ "$(get_os)" == "Linux" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 # Function to check if a directory or file exists in the given path
 exist() {
 	[ -e "$1" ]
@@ -95,6 +123,11 @@ if command_exist "ghq" && command_exist "peco"; then
 	alias repo='cd $(ghq list -p | peco)'  # Navigate to a directory selected from a list of repositories using ghq and peco
 fi
 
-alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean'  # Updates and upgrades the system, removes unnecessary packages, and cleans up
+if is_macos; then
+	alias update='brew update && brew upgrade && brew autoremove && brew cleanup'
+elif is_linux; then
+	alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean'  # Updates and upgrades the system, removes unnecessary packages, and cleans up
+fi
+
 alias killport='function _killport(){ sudo kill -9 $(lsof -t -i :"$1"); }; _killport'  # Kills a process running on a specified port
 alias reload="exec \$SHELL -l"  # Reload the shell
